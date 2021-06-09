@@ -20,7 +20,7 @@ static const R_CallMethodDef CallEntries[] = {
 };
 
 
-void attribute_visible R_init_mptp(DllInfo *info)
+void attribute_visible R_init_bm(DllInfo *info)
 {
     R_registerRoutines(info, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(info, FALSE);
