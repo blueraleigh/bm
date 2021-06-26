@@ -3,7 +3,7 @@
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
 #' phy = drop.tip(phy, setdiff(names(squamatamass), tiplabels(phy)))
-#' x = mptp.bm(squamatamass, phy)
+#' x = bm.shift(squamatamass, phy)
 #' r8t = findInterval(log(x$avg.rates), seq(min(log(x$avg.rates)), max(log(x$avg.rates)), length.out=33))
 #' edge.color = colorRampPalette(
 #'    rev(c("#67001F",
@@ -18,10 +18,14 @@
 #' "#2166AC",
 #' "#053061")))(33)[r8t]
 #' plot(phy, edge.color=edge.color)
-mptp.bm = function(x, phy) {
+bm.shift = function(x, phy) {
     stopifnot(!is.null(names(x)))
     stopifnot(is.numeric(x))
     x = x[tiplabels(phy)]
+    
+    if (length(setdiff(tiplabels(phy), names(x))))
+        stop("Some terminal nodes are missing data")
+
     obj = .Call(C_bm_shift, x, phy)
 
     list(

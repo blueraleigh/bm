@@ -8,12 +8,13 @@
 
 #define CALLDEF(name, n)  {#name, (DL_FUNC) &name, n}
 
-
+SEXP C_bm_pic(SEXP, SEXP);
 SEXP C_bm_shift(SEXP, SEXP);
 SEXP C_bm_shift_backtrack(SEXP, SEXP);
 
 
 static const R_CallMethodDef CallEntries[] = {
+    CALLDEF(C_bm_pic, 2),
     CALLDEF(C_bm_shift, 2),
     CALLDEF(C_bm_shift_backtrack, 2),
     {NULL, NULL, 0}

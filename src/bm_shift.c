@@ -59,6 +59,7 @@ static double bm_loglikelihood(struct bm *bm)
     return 0;
 }
 
+
 struct dp {
     /* number of shifted processes */
     int n_proc;
@@ -218,7 +219,9 @@ static void backtrack(int index, struct phy_node *node, struct phy *phy,
         else
         {
             struct phy_cursor *cursor;
+            rate[phy_node_index(node)] += aic_w * bg_rate;
             cursor = phy_cursor_prepare(phy, node, ALL_NODES, PREORDER);
+            phy_cursor_step(cursor);
             while ((node = phy_cursor_step(cursor)) != 0)
                 rate[phy_node_index(node)] += aic_w * (vec[index].bm.su / vec[index].bm.n);
         }
@@ -239,7 +242,7 @@ static void dp_init(double *x, int *n_edge, struct phy *phy)
     {
         if (phy_node_istip(node))
         {
-            n_edge[phy_node_index(node)] = 1;
+            n_edge[phy_node_index(node)] = 0;
         }
         else
         {
