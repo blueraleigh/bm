@@ -1,10 +1,30 @@
+#' Heterogeneous rate models of continuous character evolution
+#'
+#' Fits multi-rate Brownian motion process models of character 
+#' evolution to continuous phenotype data.
+#'
+#' @param x A named vector of character state data of type \code{numeric}.
+#' @param phy An object of class \code{tree}.
+#' @return A list with three components:
+#' \describe{
+#' \item{avg.rates}{Model-averaged branch rates for each branch in \code{phy}.
+#' Rates are calculated by averaging over the set of evaluated rate-shift
+#' configurations. The i-th rate in this vector corresponds to the branch 
+#' subtending the node having index i.}
+#' \item{aic.weights}{Akaike weights for each rate-shift configuration. The
+#' rates in \code{avg.rates} are computed using these weights. Note that only
+#' even-valued indices correspond to evaluated rate-shift configurations.}
+#' \item{rate}{A function to return branch rates associated with a specific
+#' rate-shift configuration. It takes a single argument -- the index of a valid
+#' rate-shift configuration -- and returns a vector of estimated branch rates.}
+#' }
 #' @example
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
 #' phy = drop.tip(phy, setdiff(names(squamatamass), tiplabels(phy)))
-#' x = bm.shift(squamatamass, phy)
-#' r8t = findInterval(log(x$avg.rates), seq(min(log(x$avg.rates)), max(log(x$avg.rates)), length.out=33))
+#' fit = bm.shift(squamatamass, phy)
+#' rate.bin = findInterval(log(fit$avg.rates), seq(min(log(fit$avg.rates)), max(log(fit$avg.rates)), length.out=33))
 #' edge.color = colorRampPalette(
 #'    rev(c("#67001F",
 #' "#B2182B",
@@ -16,16 +36,16 @@
 #' "#92C5DE",
 #' "#4393C3",
 #' "#2166AC",
-#' "#053061")))(33)[r8t]
-#' plot(phy, edge.color=edge.color)
+#' "#053061")))(33)[rate.bin]
+#' plot(phy, edge.color=edge.color, lwd=0.5)
 bm.shift = function(x, phy) {
     stopifnot(!is.null(names(x)))
     stopifnot(is.numeric(x))
-    x = x[tiplabels(phy)]
-    
+
     if (length(setdiff(tiplabels(phy), names(x))))
         stop("Some terminal nodes are missing data")
 
+    x = x[tiplabels(phy)]
     obj = .Call(C_bm_shift, x, phy)
 
     list(
