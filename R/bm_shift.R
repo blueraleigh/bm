@@ -22,21 +22,11 @@
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
-#' phy = drop.tip(phy, setdiff(names(squamatamass), tiplabels(phy)))
 #' fit = bm.shift(squamatamass, phy)
-#' rate.bin = findInterval(log(fit$avg.rates), seq(min(log(fit$avg.rates)), max(log(fit$avg.rates)), length.out=33))
+#' rate.bin = findInterval(fit$avg.rates, 
+#'     seq(0, quantile(fit$avg.rates, 0.95), length.out=33))
 #' edge.color = colorRampPalette(
-#'    rev(c("#67001F",
-#' "#B2182B",
-#' "#D6604D",
-#' "#F4A582",
-#' "#FDDBC7",
-#' "#F7F7F7",
-#' "#D1E5F0",
-#' "#92C5DE",
-#' "#4393C3",
-#' "#2166AC",
-#' "#053061")))(33)[rate.bin]
+#'     c("#BEBEBE","#00008B","#FF0000","#FFA500","#FFD700"))(33)[rate.bin]
 #' plot(phy, edge.color=edge.color, lwd=0.5)
 bm.shift = function(x, phy) {
     stopifnot(!is.null(names(x)))
