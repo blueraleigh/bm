@@ -18,7 +18,7 @@
 #' rate-shift configuration. It takes a single argument -- the index of a valid
 #' rate-shift configuration -- and returns a vector of estimated branch rates.}
 #' }
-#' @example
+#' @examples
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)

@@ -11,3 +11,4 @@ Depends: phylo
 LinkingTo: phylo
 NeedsCompilation: yes
 License: CC0
+RoxygenNote: 7.1.2

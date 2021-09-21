@@ -16,7 +16,7 @@
 #' }
 #' Note that the returned list has a \code{rate} attribute that contains the
 #' maximum likelihood estimate of the Brownian motion rate parameter.
-#' @example
+#' @examples
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
