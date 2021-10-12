@@ -257,7 +257,7 @@ static void dp_init(double *x, int *n_edge, struct phy *phy)
     while ((node = phy_cursor_step(cursor)) != 0)
     {
         dp = calloc(n_edge[phy_node_index(node)] + 1, sizeof(*dp));
-        phy_node_add_data(node, (void *)dp, &free);
+        phy_node_set_data(node, (void *)dp, &free);
     }
 
     for (i = 0; i < phy_ntip(phy); ++i)
