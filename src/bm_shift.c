@@ -200,15 +200,17 @@ static void downpass(struct phy *phy, int *n_edge)
 
 
 static void backtrack(int index, struct phy_node *node, struct phy *phy,
-    double aic_w, double bg_rate, double *rate)
+    double aic_w, double bg_rate, double *rate, int *i, int *shift)
 {
     struct dp *vec = (struct dp *)phy_node_data(node);
 
     if (vec[index].j != -1 && vec[index].k != -1)
     {
         rate[phy_node_index(node)] += aic_w * bg_rate;
-        backtrack(vec[index].j, phy_node_lfdesc(node), phy, aic_w, bg_rate, rate);
-        backtrack(vec[index].k, phy_node_rtdesc(node), phy, aic_w, bg_rate, rate);
+        backtrack(vec[index].j, phy_node_lfdesc(node), phy, aic_w, bg_rate, 
+            rate, i, shift);
+        backtrack(vec[index].k, phy_node_rtdesc(node), phy, aic_w, bg_rate, 
+            rate, i, shift);
     }
     else
     {
@@ -219,6 +221,10 @@ static void backtrack(int index, struct phy_node *node, struct phy *phy,
         else
         {
             struct phy_cursor *cursor;
+
+            if (i && shift && node != phy_root(phy))
+                shift[(*i)++] = phy_node_index(node)+1;
+
             rate[phy_node_index(node)] += aic_w * bg_rate;
             cursor = phy_cursor_prepare(phy, node, ALL_NODES, PREORDER);
             phy_cursor_step(cursor);
@@ -332,7 +338,8 @@ SEXP C_bm_shift(SEXP x, SEXP rtree)
         if (dp[i].filled)
         {
             aic_w[i] /= w;
-            backtrack(i, phy_root(phy), phy, aic_w[i], dp[i].bm.su / dp[i].bm.n, rate);
+            backtrack(i, phy_root(phy), phy, aic_w[i], dp[i].bm.su / dp[i].bm.n, 
+                rate, 0, 0);
         }
     }
 
@@ -351,12 +358,23 @@ SEXP C_bm_shift(SEXP x, SEXP rtree)
 SEXP C_bm_shift_backtrack(SEXP index, SEXP rtree)
 {
     int i = *INTEGER(index);
+    int j = 0;
     struct phy *phy = (struct phy *)R_ExternalPtrAddr(rtree);
     struct dp *dp = (struct dp *)phy_node_data(phy_root(phy));
+    int shift[phy_nnode(phy)];
     SEXP rate = PROTECT(allocVector(REALSXP, phy_nnode(phy)));
     memset(REAL(rate), 0, phy_nnode(phy) * sizeof(double));
-    if (dp && dp[i].filled)
-        backtrack(i, phy_root(phy), phy, 1, dp[i].bm.su / dp[i].bm.n, REAL(rate));
-    UNPROTECT(1);
+    if (dp && dp[i].filled) {
+        backtrack(i, phy_root(phy), phy, 1, dp[i].bm.su / dp[i].bm.n, 
+            REAL(rate), &j, shift);
+    }
+
+    SEXP shifts = PROTECT(allocVector(INTSXP, j));
+
+    memcpy(INTEGER(shifts), shift, j*sizeof(int));
+
+    setAttrib(rate, install("shifts"), shifts);
+
+    UNPROTECT(2);
     return rate;
 }
