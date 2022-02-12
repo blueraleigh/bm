@@ -45,3 +45,66 @@ bm.pic = function(x, phy) {
 
     return (ans)
 }
+
+
+#' Compute tip rates using phylogenetic independent contrasts
+#'
+#' As the number of terminal nodes in the phylogeny grows large the
+#' average tip rate converges on the maximum likelihood estimate of the
+#' Brownian motion variance parameter.
+#'
+#' @param x A named vector of character state data having type \code{numeric}.
+#' @param phy An object of class \code{tree}.
+#' @return A vector of tip rates
+#' @examples
+#' data(squamatatree)
+#' data(squamatamass)
+#' phy = read.newick(text=squamatatree)
+#' x = bm.tiprate(squamatamass, phy)
+#' # average tiprate
+#' mean(x) # 0.02721007
+#' # maximum likelihood rate estimate
+#' attr(bm.pic(squamatamass, phy)[[1]], "rate") # 0.02721699
+bm.tiprate = function(x, phy) {
+    n = Ntip(phy)
+    y = numeric(n)
+    pic = bm.pic(x, phy)
+    for (i in 1:n) {
+        anc = ancestors(phy)[[i]]
+        for (j in 1:length(anc)) {
+            cont = pic[[1]][as.character(anc[j]), ]
+            # squared contrast scaled by contrast variance
+            d = (cont[1]*cont[1]) / cont[2]
+            y[i] = y[i] + d / 2^j
+        }
+    }
+    y
+}
+
+
+#' Compute multivariate tip rates using phylogenetic independent contrasts
+#'
+#' As the number of terminal nodes in the phylogeny grows large the
+#' average tip rate converges on the maximum likelihood estimate of the
+#' Brownian motion covariance matrix
+#'
+#' @param x A matrix (with row names) of character state data having type \code{numeric}.
+#' @param phy An object of class \code{tree}.
+#' @return A list of matrix-valued tip rates
+bm.mvtiprate = function(x, phy) {
+    p = ncol(x)
+    n = Ntip(phy)
+    U = apply(x, 2, bm.pic, phy=phy)
+    U = do.call(cbind, lapply(U, function(u) u[[1]][,1] / sqrt(u[[1]][,2])))
+    y = vector("list", n)
+    for (i in 1:n) {
+        y[[i]] = matrix(0, p, p)
+        anc = ancestors(phy)[[i]]
+        for (j in 1:length(anc)) {
+            u = U[as.character(anc[j]), ]
+            d = u %*% t(u)
+            y[[i]] = y[[i]] + d / 2^j
+        }
+    }
+    y
+}
