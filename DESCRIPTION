@@ -2,7 +2,7 @@ Package: bm
 Type: Package
 Title: Brownian motion models of character evolution
 Version: 1.0
-Date: 2019-10-07
+Date: 2022-02-22
 Author: Michael C. Grundler
 Maintainer: Michael C. Grundler <mcgrundler@gmail.com>
 Description: Package bm implements various Brownian motion models of
