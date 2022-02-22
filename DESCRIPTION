@@ -8,6 +8,8 @@ Maintainer: Michael C. Grundler <mcgrundler@gmail.com>
 Description: Package bm implements various Brownian motion models of
   continuous character evolution.
 Depends: phylo, R (>= 3.5.0)
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 LinkingTo: phylo
 NeedsCompilation: yes
 License: CC0

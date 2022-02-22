@@ -22,7 +22,9 @@
 #' \dontrun{
 #' # For a more complete example see
 #' demo(bm.shift, package="bm", ask=TRUE)
-#' 
+#' # or
+#' vignette("bm.shift")
+#'
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
