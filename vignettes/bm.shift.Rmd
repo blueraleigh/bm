@@ -54,7 +54,7 @@ We'll use these results to color branches according to their
 inferred mass, with warmer colors representing heavier masses.
 
 ```{r}
-node.state = c(x, pic$ace)
+node.state = c(x[phylo::tiplabels(phy)], pic$ace)
 rate.bin = findInterval(node.state, seq(min(node.state), max(node.state), length.out=33))
 pal = c("#053061", "#2166AC", "#4393C3", "#92C5DE", "#D1E5F0", "#F7F7F7", 
         "#FDDBC7", "#F4A582", "#D6604D", "#B2182B", "#67001F")
