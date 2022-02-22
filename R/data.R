@@ -16,3 +16,9 @@
 #' @format A Newick formatted character string
 #' @source Tonini, J., Beard, K.H., Ferreira, R.B., Jetz, W., and R.A. Pyron. 2016. Biological Conservation 204: 23-31
 "squamatatree"
+
+#' Turtle body sizes and phylogeny
+#'
+#' A list with turtle body sizes and a time-calibrated phylogeny of turtles.
+#' @source Eastman, J.M., Alfara, M.E., Joyce, P., Hipp, A.L., and L.J. Harmon. 2011. Evolution 65(12): 3578-3589
+"chelonia"

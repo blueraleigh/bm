@@ -7,7 +7,7 @@ Author: Michael C. Grundler
 Maintainer: Michael C. Grundler <mcgrundler@gmail.com>
 Description: Package bm implements various Brownian motion models of
   continuous character evolution.
-Depends: phylo
+Depends: phylo, R (>= 3.5.0)
 LinkingTo: phylo
 NeedsCompilation: yes
 License: CC0

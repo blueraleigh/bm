@@ -19,6 +19,10 @@
 #' rate-shift configuration -- and returns a vector of estimated branch rates.}
 #' }
 #' @examples
+#' \dontrun{
+#' # For a more complete example see
+#' demo(bm.shift, package="bm", ask=TRUE)
+#' 
 #' data(squamatatree)
 #' data(squamatamass)
 #' phy = read.newick(text=squamatatree)
@@ -28,6 +32,7 @@
 #' edge.color = colorRampPalette(
 #'     c("#BEBEBE","#00008B","#FF0000","#FFA500","#FFD700"))(33)[rate.bin]
 #' plot(phy, edge.color=edge.color, lwd=0.5)
+#' }
 bm.shift = function(x, phy) {
     stopifnot(!is.null(names(x)))
     stopifnot(is.numeric(x))

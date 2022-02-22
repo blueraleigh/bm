@@ -31,6 +31,10 @@ Fits multi-rate Brownian motion process models of character
 evolution to continuous phenotype data.
 }
 \examples{
+\dontrun{
+# For a more complete example see
+demo(bm.shift, package="bm", ask=TRUE)
+
 data(squamatatree)
 data(squamatamass)
 phy = read.newick(text=squamatatree)
@@ -40,4 +44,5 @@ rate.bin = findInterval(fit$avg.rates,
 edge.color = colorRampPalette(
     c("#BEBEBE","#00008B","#FF0000","#FFA500","#FFD700"))(33)[rate.bin]
 plot(phy, edge.color=edge.color, lwd=0.5)
+}
 }
