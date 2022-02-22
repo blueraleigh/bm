@@ -20,9 +20,9 @@ head(x)
 pic = bm::bm.pic(x, phy)
 
 # The first component of this list is a matrix with independent contrasts
-# stored in the first column and the contrast variances stored in the second/
+# stored in the first column and the contrast variances stored in the second.
 # The rownames of this matrix correspond to the node indices to which the
-# contrasts apply. For 'tree' class phylogenies used in bm mk package, node indices
+# contrasts apply. For 'tree' class phylogenies used in bm package, node indices
 # are identical to the node indices of an ape 'phylo' object in 'cladewise'
 # node order
 #
